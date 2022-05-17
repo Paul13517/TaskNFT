@@ -4,11 +4,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
+using UnityEngine.UI;
 
 public class ImportNFTIPFS : MonoBehaviour
 {
     //int _rotationSpeed = 6;
-    public string contract = "0xBC4CA0EdA7647A8aB7C2061c2E118A18a936f13D";
+    public string contract;
+    public GameObject inputField;
 
     [Serializable]
     public class Attribute
@@ -23,9 +25,10 @@ public class ImportNFTIPFS : MonoBehaviour
         public List<Attribute> attributes { get; set; }
     }
 
-    public GameObject gameObject;
-    async void Start()
+    public GameObject[] gameObject;
+    public async void GetImage()
     {
+        contract = inputField.GetComponent<Text>().text;
         string chain = "ethereum";
         string network = "mainnet";
         // BAYC contract address
@@ -63,7 +66,9 @@ public class ImportNFTIPFS : MonoBehaviour
         // fetch image and display in game
         UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(imageUri);
         await textureRequest.SendWebRequest();
-        this.gameObject.GetComponent<Renderer>().material.mainTexture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
+       for(int i = 0; i < gameObject.Length; i++){
+        this.gameObject[i].GetComponent<Renderer>().material.mainTexture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
+       }
     }
 
    /* public void FixedUpdate()
