@@ -11,6 +11,8 @@ public class ImportNFTIPFS : MonoBehaviour
     //int _rotationSpeed = 6;
     public string contract;
     public GameObject inputField;
+    public GameObject startPage;
+    public GameObject imagePage;
 
     [Serializable]
     public class Attribute
@@ -69,11 +71,20 @@ public class ImportNFTIPFS : MonoBehaviour
        for(int i = 0; i < gameObject.Length; i++){
         this.gameObject[i].GetComponent<Renderer>().material.mainTexture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
        }
+
+       startPage.SetActive(false);
+       OnSwitch (true) ;
+       
     }
 
-   /* public void FixedUpdate()
-    {
-        // be sure to capitalize Rotate or you'll get errors
-        transform.Rotate(0, _rotationSpeed * Time.deltaTime, -2);
-    }*/
+      void OnSwitch (bool on) {
+
+      
+      imagePage.SetActive (on ? true : false);
+     
+      
+     }
+     
+
+  
 }
