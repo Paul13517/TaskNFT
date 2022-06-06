@@ -4,14 +4,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
 using Newtonsoft.Json;
-using UnityEngine.UI;
 
-public class ImportNFTIPFS : MonoBehaviour
+public class  downLoadNFT : MonoBehaviour
 {
-    public string contract;
-    public GameObject inputField;
-    public GameObject startPage;
-    public GameObject imagePage;
+    int _rotationSpeed = 6;
 
     [Serializable]
     public class Attribute
@@ -26,15 +22,14 @@ public class ImportNFTIPFS : MonoBehaviour
         public List<Attribute> attributes { get; set; }
     }
 
-    public GameObject[] gameObject;
-    public async void GetImage()
+    public GameObject gameObject;
+    async void Start()
     {
-        contract = inputField.GetComponent<Text>().text;
         string chain = "ethereum";
         string network = "mainnet";
         // BAYC contract address
-       
-        string tokenId = "6416";
+        string contract = "0xbc4ca0eda7647a8ab7c2061c2e118a18a936f13d";
+        string tokenId = "4671";
 
         // fetch uri from chain
         string uri = await ERC721.URI(chain, network, contract, tokenId);
@@ -63,25 +58,18 @@ public class ImportNFTIPFS : MonoBehaviour
         print("Attibutes: " + data.attributes[1].trait_type);
         print("Attibutes: " + data.attributes[2].trait_type);
 
+
+        // fetch image and display in game
         UnityWebRequest textureRequest = UnityWebRequestTexture.GetTexture(imageUri);
         await textureRequest.SendWebRequest();
-        for(int i = 0; i < gameObject.Length; i++){
-            this.gameObject[i].GetComponent<Renderer>().material.mainTexture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
-        }
-
-       startPage.SetActive(false);
-       OnSwitch (true) ;
-       
+        this.gameObject.GetComponent<Renderer>().material.mainTexture = ((DownloadHandlerTexture)textureRequest.downloadHandler).texture;
     }
 
-      void OnSwitch (bool on) {
-
-      
-      imagePage.SetActive (on ? true : false);
-     
-      
-     }
-     
-
-  
+    public void FixedUpdate()
+    {
+        // be sure to capitalize Rotate or you'll get errors
+        transform.Rotate(0, _rotationSpeed * Time.deltaTime, -2);
+    }
 }
+
+
